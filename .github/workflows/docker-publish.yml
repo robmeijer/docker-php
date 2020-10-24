@@ -8,23 +8,15 @@ on:
   pull_request:
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Run tests
-        run: |
-          docker build . --file Dockerfile
-
-  push:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build image
+      - name: Build images
         run: docker-compose build --pull
       - name: Log into GitHub Container Registry
+        if: github.event_name == 'push'
         run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Push image to GitHub Container Registry
+        if: github.event_name == 'push'
         run: docker-compose push
