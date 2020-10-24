@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+    php-fpm:
+        image: ghcr.io/robmeijer/php:${PHP_VERSION}-fpm
+        build:
+            args:
+                PHP_VERSION: "${PHP_VERSION}"
+            context: .
+            cache_from:
+                - ghcr.io/robmeijer/php:${PHP_VERSION}-fpm
+    php-fpm-mongodb:
+        image: ghcr.io/robmeijer/php:${PHP_VERSION}-fpm-mongodb
+        build:
+            args:
+                PHP_VERSION: "${PHP_VERSION}"
+                WITH_MONGODB: "true"
+            context: .
+            cache_from:
+                - ghcr.io/robmeijer/php:${PHP_VERSION}-fpm-mongodb
